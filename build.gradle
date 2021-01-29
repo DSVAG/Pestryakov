@@ -1,0 +1,29 @@
+buildscript {
+    ext.kotlinVersion = "1.4.21"
+    ext.lifecycleVersion = "2.2.0"
+    ext.glideVersion = "4.11.0"
+    ext.hiltVersion = "2.28-alpha"
+    ext.hiltViewModelVersion = "1.0.0-alpha03"
+
+    repositories {
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath "com.android.tools.build:gradle:4.1.2"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion"
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
