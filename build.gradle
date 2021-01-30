@@ -3,7 +3,7 @@ buildscript {
     ext.lifecycleVersion = "2.2.0"
     ext.glideVersion = "4.11.0"
     ext.hiltVersion = "2.28-alpha"
-    ext.hiltViewModelVersion = "1.0.0-alpha03"
+    ext.hiltViewModelVersion = "1.0.0-alpha02"
 
     repositories {
         google()
