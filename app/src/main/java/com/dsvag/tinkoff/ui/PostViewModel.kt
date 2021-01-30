@@ -1,5 +1,7 @@
 package com.dsvag.tinkoff.ui
 
+import android.net.Uri
+import androidx.core.net.toUri
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,24 +20,24 @@ class PostViewModel @ViewModelInject constructor(
     val state get() = _mutableState
 
     private val _mutablePosts = MutableLiveData<MutableList<Post>>(mutableListOf())
-    private val _mutablePost = MutableLiveData<Pair<Post?, Int>>()
+    private val _mutablePost = MutableLiveData<Pair<Post?, Int>>(null to 0)
     val post get() = _mutablePost
 
-    private var id = -1
+    private var postInd = -1
 
     fun next() {
-        if (id == -1 || id == _mutablePosts.value?.lastIndex) {
+        if (postInd == -1 || postInd == _mutablePosts.value?.lastIndex) {
+            postInd += 1
             loadNext()
-            id += 1
         } else {
-            id += 1
-            _mutablePost.postValue(_mutablePosts.value?.get(id) to id)
+            postInd += 1
+            _mutablePost.postValue(_mutablePosts.value?.get(postInd) to postInd)
         }
     }
 
     fun previous() {
-        id = max(id - 1, 0)
-        _mutablePost.postValue(_mutablePosts.value?.get(id) to id)
+        postInd = max(postInd - 1, 0)
+        _mutablePost.postValue(_mutablePosts.value?.get(postInd) to postInd)
     }
 
     private fun loadNext() {
@@ -43,13 +45,14 @@ class PostViewModel @ViewModelInject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             val response = postRepository.fetchRandomPost()
+
             if (response.isSuccessful && response.body() != null) {
                 val value = _mutablePosts.value
 
                 value?.add(response.body()!!)
 
                 _mutablePosts.postValue(value!!)
-                _mutablePost.postValue(_mutablePosts.value?.get(id) to id)
+                _mutablePost.postValue(_mutablePosts.value?.get(postInd) to postInd)
 
                 setState(State.Success)
             } else {
@@ -63,6 +66,8 @@ class PostViewModel @ViewModelInject constructor(
             state.value = newState
         }
     }
+
+    fun getGifUrl(): Uri? = post.value?.first?.gifURL?.toUri()
 
     sealed class State {
         object Default : State()

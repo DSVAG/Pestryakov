@@ -1,15 +1,18 @@
 package com.dsvag.tinkoff.ui
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.os.Bundle
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.dsvag.tinkoff.R
 import com.dsvag.tinkoff.databinding.ActivityMainBinding
+import com.dsvag.tinkoff.di.GlideApp
 import com.dsvag.tinkoff.models.Post
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -21,9 +24,7 @@ class MainActivity : AppCompatActivity() {
     private val postViewModel by viewModels<PostViewModel>()
 
     private val rotateAnimation by lazy {
-        AnimationUtils.loadAnimation(this, R.anim.rotate).apply {
-            repeatCount = 0
-        }
+        AnimationUtils.loadAnimation(this, R.anim.rotate)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,21 +49,30 @@ class MainActivity : AppCompatActivity() {
             post?.let {
                 binding.gifDescription.text = it.description
 
-                Glide
+                GlideApp
                     .with(this)
-                    .load(it.previewURL)
+                    .asGif()
+                    .load(it.gifURL)
                     .optionalCenterInside()
                     .transition(DrawableTransitionOptions.withCrossFade(200))
-                    .diskCacheStrategy(DiskCacheStrategy.DATA)
-                    .skipMemoryCache(false)
                     .into(binding.gifPlaceholder)
             }
+        }
+
+        binding.card.setOnLongClickListener {
+            val clipboard = ContextCompat.getSystemService(this, ClipboardManager::class.java)
+            val clip = ClipData.newUri(contentResolver, "Gif URL", postViewModel.getGifUrl())
+
+            clipboard?.setPrimaryClip(clip)
+            Toast.makeText(this, "Gif URL Copied", Toast.LENGTH_SHORT).show()
+
+            true
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Glide.get(this).clearMemory()
+        GlideApp.get(this).clearMemory()
     }
 
     private fun stateObserver(state: PostViewModel.State) {
