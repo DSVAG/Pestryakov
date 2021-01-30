@@ -1,1 +1,1 @@
-Tikoff Android Homework
+Tinkoff Android Homework
