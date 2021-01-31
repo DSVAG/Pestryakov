@@ -39,7 +39,14 @@
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/gifPlaceholder"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:elevation="4dp" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/bottomGifPlaceholder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="0dp" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/gifDescription"
@@ -47,6 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="@drawable/fg_gradient"
+            android:elevation="6dp"
             android:paddingHorizontal="8dp"
             android:paddingVertical="4dp"
             android:textColor="@color/white"

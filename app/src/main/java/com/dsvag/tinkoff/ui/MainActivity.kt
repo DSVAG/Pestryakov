@@ -16,6 +16,7 @@ import com.dsvag.tinkoff.databinding.ActivityMainBinding
 import com.dsvag.tinkoff.models.Post
 import dagger.hilt.android.AndroidEntryPoint
 
+
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
@@ -93,6 +94,13 @@ class MainActivity : AppCompatActivity() {
             .optionalCenterInside()
             .transition(DrawableTransitionOptions.withCrossFade(200))
             .into(binding.gifPlaceholder)
+
+        Glide.with(this)
+            .asGif()
+            .load(post.gifUrl)
+            .optionalCenterCrop()
+            .transition(DrawableTransitionOptions.withCrossFade(200))
+            .into(binding.bottomGifPlaceholder)
     }
 
     private fun onError() {

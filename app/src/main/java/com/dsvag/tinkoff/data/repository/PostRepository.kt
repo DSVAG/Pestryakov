@@ -31,18 +31,17 @@ class PostRepository @Inject constructor(private val apiPostService: ApiPostServ
     private suspend fun fetchRandomPost(): Pair<Post, Int>? {
         val response = runCatching { apiPostService.getRandomPost() }.getOrNull()
 
-        if (response != null && response.isSuccessful && response.body() != null) {
+        return if (response != null && response.isSuccessful && response.body() != null) {
             if (response.body()?.gifSize != 0) {
-
                 _mutablePosts.add(response.body()!!)
                 postInd += 1
 
-                return _mutablePosts[postInd] to postInd
+                _mutablePosts[postInd] to postInd
             } else {
-                return fetchRandomPost()
+                fetchRandomPost()
             }
         } else {
-            return null
+            null
         }
     }
 }
