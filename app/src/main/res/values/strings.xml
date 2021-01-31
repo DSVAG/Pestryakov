@@ -5,5 +5,6 @@
     <string name="previous_gif">Previous Gif</string>
     <string name="network_connection_error">An error occurred while loading data. Check your network connection</string>
     <string name="repeat">Repeat</string>
+    <string name="toast_msg">Gif Url Copied</string>
 
 </resources>

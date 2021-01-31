@@ -12,6 +12,7 @@ import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.dsvag.tinkoff.R
+import com.dsvag.tinkoff.data.repository.PostRepository
 import com.dsvag.tinkoff.databinding.ActivityMainBinding
 import com.dsvag.tinkoff.models.Post
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,39 +50,23 @@ class MainActivity : AppCompatActivity() {
 
         postViewModel.state.observe(this, ::stateObserver)
 
-        postViewModel.post.observe(this) { (post: Post, id: Int) ->
-            binding.buttonPrevious.isEnabled = id > 0
-
-            post.let {
-                binding.gifDescription.text = it.description
-
-                Glide
-                    .with(this)
-                    .asGif()
-                    .load(it.gifUrl)
-                    .optionalCenterInside()
-                    .transition(DrawableTransitionOptions.withCrossFade(200))
-                    .into(binding.gifPlaceholder)
-            }
-        }
-
         binding.card.setOnLongClickListener {
             val clipboard = ContextCompat.getSystemService(this, ClipboardManager::class.java)
-            val clip = ClipData.newUri(contentResolver, "Gif URL", postViewModel.getGifUrl())
+            val clip = ClipData.newUri(contentResolver, "Gif Url", postViewModel.getGifUrl())
 
             clipboard?.setPrimaryClip(clip)
-            Toast.makeText(this, "Gif URL Copied", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, this.getString(R.string.toast_msg), Toast.LENGTH_SHORT).show()
 
             true
         }
     }
 
-    private fun stateObserver(state: PostViewModel.State) {
+    private fun stateObserver(state: PostRepository.State) {
         when (state) {
-            PostViewModel.State.Default -> postViewModel.next()
-            PostViewModel.State.Loading -> onLoad()
-            PostViewModel.State.Success -> onSuccess()
-            PostViewModel.State.Error -> onError()
+            PostRepository.State.Default -> postViewModel.next()
+            PostRepository.State.Loading -> onLoad()
+            is PostRepository.State.Success -> onSuccess(state.post, state.ind)
+            PostRepository.State.Error -> onError()
         }
     }
 
@@ -90,13 +75,25 @@ class MainActivity : AppCompatActivity() {
         binding.buttonNext.isEnabled = false
     }
 
-    private fun onSuccess() {
+    private fun onSuccess(post: Post, ind: Int) {
         binding.loadingIndicator.isVisible = false
         binding.card.isVisible = true
         binding.buttonNext.isEnabled = true
         binding.buttonNext.isVisible = true
         binding.buttonPrevious.isVisible = true
         binding.networkError.isVisible = false
+
+        binding.buttonPrevious.isEnabled = ind > 0
+
+        binding.gifDescription.text = post.description
+
+        Glide
+            .with(this)
+            .asGif()
+            .load(post.gifUrl)
+            .optionalCenterInside()
+            .transition(DrawableTransitionOptions.withCrossFade(200))
+            .into(binding.gifPlaceholder)
     }
 
     private fun onError() {
