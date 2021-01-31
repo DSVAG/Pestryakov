@@ -1,11 +1,9 @@
 <resources>
     <string name="app_name">Tinkoff</string>
 
-    <string name="tab_hot">Hot</string>
-    <string name="tab_top">Top</string>
-    <string name="tab_last">Latest</string>
-    <string name="tab_random">Random</string>
-    <string name="next_gif">next Gif</string>
+    <string name="next_gif">Next Gif</string>
     <string name="previous_gif">Previous Gif</string>
+    <string name="network_connection_error">An error occurred while loading data. Check your network connection</string>
+    <string name="repeat">Repeat</string>
 
 </resources>

@@ -47,14 +47,18 @@ class PostViewModel @ViewModelInject constructor(
             val response = postRepository.fetchRandomPost()
 
             if (response.isSuccessful && response.body() != null) {
-                val value = _mutablePosts.value
+                if (response.body()?.gifSize != 0) {
+                    val value = _mutablePosts.value
 
-                value?.add(response.body()!!)
+                    value?.add(response.body()!!)
 
-                _mutablePosts.postValue(value!!)
-                _mutablePost.postValue(_mutablePosts.value?.get(postInd) to postInd)
+                    _mutablePosts.postValue(value!!)
+                    _mutablePost.postValue(_mutablePosts.value?.get(postInd) to postInd)
 
-                setState(State.Success)
+                    setState(State.Success)
+                } else {
+                    loadNext()
+                }
             } else {
                 setState(State.Error)
             }

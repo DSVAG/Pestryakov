@@ -9,12 +9,15 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.dsvag.tinkoff.R
 import com.dsvag.tinkoff.databinding.ActivityMainBinding
 import com.dsvag.tinkoff.di.GlideApp
 import com.dsvag.tinkoff.models.Post
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -39,6 +42,10 @@ class MainActivity : AppCompatActivity() {
         binding.buttonPrevious.setOnClickListener {
             postViewModel.previous()
             it.startAnimation(rotateAnimation)
+        }
+
+        binding.buttonRepeat.setOnClickListener {
+            postViewModel.next()
         }
 
         postViewModel.state.observe(this, ::stateObserver)
@@ -70,9 +77,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // FIXME: 1/31/2021
     override fun onDestroy() {
         super.onDestroy()
-        GlideApp.get(this).clearMemory()
+        lifecycleScope.launch(Dispatchers.IO) {
+            GlideApp.get(this@MainActivity).clearDiskCache()
+        }
     }
 
     private fun stateObserver(state: PostViewModel.State) {
@@ -93,11 +103,14 @@ class MainActivity : AppCompatActivity() {
         binding.loadingIndicator.isVisible = false
         binding.card.isVisible = true
         binding.buttonNext.isEnabled = true
+        binding.buttonNext.isVisible = true
+        binding.buttonPrevious.isVisible = true
     }
 
     private fun onError() {
         binding.loadingIndicator.isVisible = false
         binding.card.isVisible = false
-        binding.buttonNext.isEnabled = true
+        binding.buttonNext.isVisible = false
+        binding.buttonPrevious.isVisible = false
     }
 }

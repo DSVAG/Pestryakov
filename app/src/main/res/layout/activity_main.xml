@@ -6,40 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.MainActivity">
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabs"
-        style="@style/Theme.TabLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:elevation="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tabIndicatorColor="@color/blue"
-        app:tabRippleColor="@color/blue">
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tab_random" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tab_last" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tab_top" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tab_hot" />
-
-    </com.google.android.material.tabs.TabLayout>
-
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/loadingIndicator"
         android:layout_width="wrap_content"
@@ -67,7 +33,7 @@
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tabs">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/gifPlaceholder"
@@ -87,14 +53,46 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-    <com.google.android.material.internal.BaselineLayout
-        android:id="@+id/baselineLayout"
-        android:layout_width="2dp"
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_margin="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/card"
+        app:layout_constraintEnd_toEndOf="@+id/card"
+        app:layout_constraintStart_toStartOf="@+id/card"
+        app:layout_constraintTop_toTopOf="@+id/card">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="8dp"
+            app:srcCompat="@drawable/ic_cloud"
+            app:tint="@color/black" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="@string/network_connection_error"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/buttonRepeat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="@string/repeat"
+            android:textColor="@color/blue"
+            android:textSize="24sp" />
+
+    </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/buttonNext"
@@ -106,7 +104,9 @@
         app:borderWidth="2dp"
         app:elevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/baselineLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/buttonPrevious"
         app:rippleColor="@color/transparent10"
         app:srcCompat="@drawable/ic_next"
         app:tint="@color/green" />
@@ -122,7 +122,9 @@
         app:borderWidth="2dp"
         app:elevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/baselineLayout"
+        app:layout_constraintEnd_toStartOf="@+id/buttonNext"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
         app:rippleColor="@color/transparent10"
         app:srcCompat="@drawable/ic_back"
         app:tint="@color/yellow" />
