@@ -12,7 +12,6 @@ import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.dsvag.tinkoff.R
-import com.dsvag.tinkoff.data.repository.PostRepository
 import com.dsvag.tinkoff.databinding.ActivityMainBinding
 import com.dsvag.tinkoff.models.Post
 import dagger.hilt.android.AndroidEntryPoint
@@ -61,12 +60,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun stateObserver(state: PostRepository.State) {
+    private fun stateObserver(state: PostViewModel.State) {
         when (state) {
-            PostRepository.State.Default -> postViewModel.next()
-            PostRepository.State.Loading -> onLoad()
-            is PostRepository.State.Success -> onSuccess(state.post, state.ind)
-            PostRepository.State.Error -> onError()
+            PostViewModel.State.Default -> postViewModel.next()
+            PostViewModel.State.Loading -> onLoad()
+            is PostViewModel.State.Success -> onSuccess(state.post, state.ind)
+            PostViewModel.State.Error -> onError()
         }
     }
 
