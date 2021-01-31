@@ -11,14 +11,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginBottom="32dp"
         android:elevation="16dp"
         android:indeterminate="true"
         android:visibility="invisible"
         app:indicatorColor="@color/blue"
-        app:layout_constraintBottom_toBottomOf="@+id/card"
+        app:layout_constraintBottom_toTopOf="@+id/networkError"
         app:layout_constraintEnd_toEndOf="@+id/card"
         app:layout_constraintStart_toStartOf="@+id/card"
-        app:layout_constraintTop_toTopOf="@+id/card"
         app:trackColor="@color/white"
         tools:visibility="visible" />
 
@@ -27,6 +27,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="32dp"
+        android:visibility="invisible"
         app:cardCornerRadius="16dp"
         app:cardElevation="8dp"
         app:layout_constraintBottom_toTopOf="@+id/buttonPrevious"
@@ -54,18 +55,22 @@
     </com.google.android.material.card.MaterialCardView>
 
     <LinearLayout
+        android:id="@+id/networkError"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="8dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="32dp"
+        android:elevation="16dp"
+        android:gravity="center"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="@+id/card"
-        app:layout_constraintEnd_toEndOf="@+id/card"
-        app:layout_constraintStart_toStartOf="@+id/card"
-        app:layout_constraintTop_toTopOf="@+id/card">
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
             android:layout_gravity="center"
             android:padding="8dp"
             app:srcCompat="@drawable/ic_cloud"
@@ -86,6 +91,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
             android:gravity="center"
             android:padding="8dp"
             android:text="@string/repeat"

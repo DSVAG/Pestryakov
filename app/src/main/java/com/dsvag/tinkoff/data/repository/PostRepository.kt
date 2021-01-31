@@ -8,7 +8,7 @@ import javax.inject.Inject
 class PostRepository @Inject constructor(private val apiPostService: ApiPostService) {
 
     suspend fun fetchRandomPost(): Response<Post> {
-        return apiPostService.getRandom()
+        return apiPostService.getRandomPost()
     }
 
 }

@@ -9,20 +9,19 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.dsvag.tinkoff.R
 import com.dsvag.tinkoff.databinding.ActivityMainBinding
-import com.dsvag.tinkoff.di.GlideApp
 import com.dsvag.tinkoff.models.Post
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private val binding by lazy(LazyThreadSafetyMode.NONE) {
+        ActivityMainBinding.inflate(layoutInflater)
+    }
 
     private val postViewModel by viewModels<PostViewModel>()
 
@@ -50,16 +49,16 @@ class MainActivity : AppCompatActivity() {
 
         postViewModel.state.observe(this, ::stateObserver)
 
-        postViewModel.post.observe(this) { (post: Post?, id: Int) ->
+        postViewModel.post.observe(this) { (post: Post, id: Int) ->
             binding.buttonPrevious.isEnabled = id > 0
 
-            post?.let {
+            post.let {
                 binding.gifDescription.text = it.description
 
-                GlideApp
+                Glide
                     .with(this)
                     .asGif()
-                    .load(it.gifURL)
+                    .load(it.gifUrl)
                     .optionalCenterInside()
                     .transition(DrawableTransitionOptions.withCrossFade(200))
                     .into(binding.gifPlaceholder)
@@ -74,14 +73,6 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Gif URL Copied", Toast.LENGTH_SHORT).show()
 
             true
-        }
-    }
-
-    // FIXME: 1/31/2021
-    override fun onDestroy() {
-        super.onDestroy()
-        lifecycleScope.launch(Dispatchers.IO) {
-            GlideApp.get(this@MainActivity).clearDiskCache()
         }
     }
 
@@ -105,6 +96,7 @@ class MainActivity : AppCompatActivity() {
         binding.buttonNext.isEnabled = true
         binding.buttonNext.isVisible = true
         binding.buttonPrevious.isVisible = true
+        binding.networkError.isVisible = false
     }
 
     private fun onError() {
@@ -112,5 +104,6 @@ class MainActivity : AppCompatActivity() {
         binding.card.isVisible = false
         binding.buttonNext.isVisible = false
         binding.buttonPrevious.isVisible = false
+        binding.networkError.isVisible = true
     }
 }
